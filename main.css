@@ -1,0 +1,49 @@
+
+.navbar-collapse{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.navbar-collapse div{
+    display: flex;
+    gap:40px
+}
+.card-container{
+    display: flex;
+    justify-content: center;
+}
+.status-card{
+    min-width: 400px;
+    min-height: 350px;
+        margin-right: 2rem;
+}
+.button-group{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 10px;
+}
+.card-investment{
+    min-width: 400px;
+    min-height: 250px;
+}
+.status-div :first-child{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom:1px solid gray;
+}
+@media screen and (max-width: 550px) {
+    .navbar-collapse div { 
+        display: flex;
+        flex-direction: column;
+    }
+  }
+@media screen and (max-width: 780px) {
+    .card-container { 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+  }
