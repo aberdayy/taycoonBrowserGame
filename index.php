@@ -4,6 +4,7 @@ require("./conn.php");
 /*
 
 banka kismi yapilacak 
+
 belki diger gelistirmeler yapilabilir
 
 */
@@ -87,7 +88,12 @@ belki diger gelistirmeler yapilabilir
         foreach ($query6 as $key) {
             $verimlilik =  $key["AVG(verimlilik)"];
          }
-        
+         $query8 = $pdo->prepare("SELECT * FROM banka WHERE borc_sirket_id = ?");
+         $query8->execute([$myID]);
+         foreach($query8 as $key){
+            $kredi_skoru = $key["kredi_skoru"];
+         }
+         
 ?>
                 <!--NAVBAR -->
 
@@ -140,11 +146,14 @@ belki diger gelistirmeler yapilabilir
                     </div>
                     <form>
                     <div class="card-body">
+                        <p><b>Kredi Skoru : <?php echo $kredi_skoru ; ?></b></p>
+                        
                         <div class="button-group">
-                            <a href="banka.php" class="btn btn-success">Borç Al</a>
+                            <a href="banka.php?ui=<?php echo $myID . '&ck=1' . '&ks=' .$kredi_skoru; ?>" class="btn btn-success">Borç Al</a>
                             <a href="banka.php"class="btn btn-danger">Borç Öde</a>
                         </div>
-                        
+                        <p>Bankadan borc almak kredi skorunu -25 baz puan etkiler. </br> 50 baz puanin altina dusersen banka sana kredi vermek istemeyecektir.</p>
+
                     </div>
                 </div>
                 <form>
