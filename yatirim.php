@@ -13,7 +13,7 @@ foreach ($query3 as $varolan) {
     $kasa = $varolan["kasa"];
     
 }
-if ($kasa>$yatirim) {
+if ($kasa>=$yatirim) {
     $sonuc2 = $kasa - $yatirim; 
     $query4 = $pdo->prepare("UPDATE sirket SET kasa = ? WHERE sirket_id = ?");
     $query4->execute([$sonuc2,$yatirimci]);
@@ -39,4 +39,3 @@ if ($kasa>$yatirim) {
 
 // Veritabanı bağlantısını kapat
 $pdo = null;
-?>

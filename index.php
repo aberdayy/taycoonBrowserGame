@@ -3,9 +3,9 @@ require("./conn.php");
 #TO DO
 /*
 
-banka kismi yapilacak 
-
-belki diger gelistirmeler yapilabilir
+Hata / Error sayfalari yapilacak
+Durum ekrani yapilacak 
+verimlilik ve yatirim dayali gelir yapilacak
 
 */
 ?>
@@ -150,7 +150,7 @@ belki diger gelistirmeler yapilabilir
                         
                         <div class="button-group">
                             <a href="banka.php?ui=<?php echo $myID . '&ck=1' . '&ks=' .$kredi_skoru; ?>" class="btn btn-success">Borç Al</a>
-                            <a href="banka.php"class="btn btn-danger">Borç Öde</a>
+                            <a href="banka.php?ui=<?php echo $myID . '&ck=0' . '&ks=' .$kredi_skoru; ?>" class="btn btn-danger">Borç Öde</a>
                         </div>
                         <p>Bankadan borc almak kredi skorunu -25 baz puan etkiler. </br> 50 baz puanin altina dusersen banka sana kredi vermek istemeyecektir.</p>
 

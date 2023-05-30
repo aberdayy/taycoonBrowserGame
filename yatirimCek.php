@@ -39,4 +39,3 @@ if ($deger>=$yatirimCek) {
 
 // Veritabanı bağlantısını kapat
 $pdo = null;
-?>

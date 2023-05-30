@@ -16,4 +16,3 @@ exit();
 
 // Veritabanı bağlantısını kapat
 $pdo = null;
-?>
