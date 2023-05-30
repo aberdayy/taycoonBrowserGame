@@ -2,9 +2,9 @@
 require("./conn.php");
 #TO DO
 /*
+Durum ekrani yapildi  
 
 Hata / Error sayfalari yapilacak
-Durum ekrani yapilacak 
 verimlilik ve yatirim dayali gelir yapilacak
 Banka ekranina kredi tutari yapilacak 
 kasadaki borcsuz para miktarina gore kredi skoru artisi yapilacak
@@ -144,18 +144,18 @@ GUNLUK GELIR GIDER YAPISI KURULMALI!!!!
             <div>
                 <div class="card status-card mt-4">
                     <div class="card-header">
-                        <h5 class="card-title">Durum</h5>
+                        <h5 class="card-title"><?php echo $sirket_adi; ?> Faaliyet Raporu</h5>
                     </div>
                     <div class="card-body">
-                    <p class="card-text h5 mb-2"> Kasa : <?php echo $kasam; ?></p>
+                    <p class="card-text h5 mb-2"> Kasa : <?php echo $kasam;?> TRY</p>
                     <p class="card-text h5 mb-2"> Gunluk Gider </p>
                     <p class="card-text h5 mb-2"> Gunluk Gelir </p>
-                    <p class="card-text h5 mb-2"> Verimlilik : <?php echo $verimlilik; ?></p>
+                    <p class="card-text h5 mb-2"> Verimlilik : %<?php echo $verimlilik; ?></p>
                     <p class="card-text h5 mb-2"> Isci Sayisi : <?php echo $Iscisayi; ?></p>
-                    <p class="card-text h5 mb-2"> Kredi Skoru : <?php echo $kredi_skoru; ?></p>
-                    <p class="card-text h5 mb-2"> Banka Kredisi Toplami : <?php echo $borc_miktari; ?></p>
-                    <p class="card-text h5 mb-2"> Yatirim Miktari <?php echo $yatirim_miktari; ?></p>
-                    <p class="card-text h5 mb-2"> Yatirima Uygun Para : <?php  $tum_yatirimlar = $kasam + $yatirim_miktari; echo $tum_yatirimlar - $borc_miktari; ?></p>
+                    <p class="card-text h5 mb-2"> Kredi Skoru : <?php echo $kredi_skoru; ?> PTS</p>
+                    <p class="card-text h5 mb-2"> Banka Kredisi Toplami : <?php echo $borc_miktari; ?> TRY</p>
+                    <p class="card-text h5 mb-2"> Yatirim Miktari <?php echo $yatirim_miktari; ?> TRY</p>
+                    <p class="card-text h5 mb-2"> Yatirima Uygun Para : <?php  $tum_yatirimlar = $kasam + $yatirim_miktari; echo $tum_yatirimlar - $borc_miktari; ?> TRY</p>
     
 
     
@@ -165,7 +165,7 @@ GUNLUK GELIR GIDER YAPISI KURULMALI!!!!
 
                 <div class="card status-card mt-4">
                     <div class="card-header">
-                        <h5 class="card-title">Banka</h5>
+                        <h5 class="card-title">Banka - Toplam Borc : <?php echo $borc_miktari; ?> TRY</h5>
                     </div>
                     <form>
                     <div class="card-body">
