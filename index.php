@@ -6,8 +6,13 @@ require("./conn.php");
 Hata / Error sayfalari yapilacak
 Durum ekrani yapilacak 
 verimlilik ve yatirim dayali gelir yapilacak
+Banka ekranina kredi tutari yapilacak 
+kasadaki borcsuz para miktarina gore kredi skoru artisi yapilacak
+en fazla kredi tutarinin yarisini yatirim yapabilecek kontrol yapilacak
 
+GUNLUK GELIR GIDER YAPISI KURULMALI!!!!
 */
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,11 +79,9 @@ verimlilik ve yatirim dayali gelir yapilacak
         $query = $pdo->prepare("SELECT * FROM sirket WHERE kullanicinin_id = ?");
         $query->execute([$myID]);
         $kasa = $query->fetch(PDO::FETCH_ASSOC);
-
         $query2 = $pdo->prepare("SELECT * FROM kullanici WHERE kullanici_id = ?");
         $query2->execute([$myID]);
         $isim = $query2->fetch(PDO::FETCH_ASSOC);
-
         $query5 = $pdo->prepare("SELECT * FROM isci WHERE sahip_sirket_id = ?");
         $query5->execute([$myID]);
         $Iscisayi = $query5->rowCount();
@@ -88,12 +91,23 @@ verimlilik ve yatirim dayali gelir yapilacak
         foreach ($query6 as $key) {
             $verimlilik =  $key["AVG(verimlilik)"];
          }
-         $query8 = $pdo->prepare("SELECT * FROM banka WHERE borc_sirket_id = ?");
+         $query9 = $pdo->prepare("SELECT * FROM yatirim WHERE yatirimci_sirket_id = ?");
+         $query9->execute([$myID]);
+         foreach ($query9 as $key) {
+             $yatirim_miktari =  $key["miktar"];
+          }
+          $query8 = $pdo->prepare("SELECT * FROM banka WHERE borc_sirket_id = ?");
          $query8->execute([$myID]);
          foreach($query8 as $key){
             $kredi_skoru = $key["kredi_skoru"];
+            $borc_miktari = $key["borc_miktari"];
          }
-         
+       $query1 = $pdo->prepare("SELECT * FROM sirket WHERE kullanicinin_id = ?");
+        $query1->execute([$myID]);
+         foreach ($query1 as $key) {
+             $sirket_adi =  $key["sirket_adi"];
+             $kasam = $key["kasa"];
+          }
 ?>
                 <!--NAVBAR -->
 
@@ -106,7 +120,7 @@ verimlilik ve yatirim dayali gelir yapilacak
                 <?php echo $isim['kullanici_adi']; ?>
             </p>
             <p class="nav-link">Kasadaki para :
-                <?php echo $kasa['kasa']; ?>
+                <?php echo $kasam; ?>
             </p>
             <p class="nav-link">Isci sayisi :
                 <?php echo $Iscisayi ; ?>
@@ -125,7 +139,6 @@ verimlilik ve yatirim dayali gelir yapilacak
         </div>
     </nav>
                 <!--DURUM EKRANI -->
-
     <div class="container-fluid">
         <div class="card-container">
             <div>
@@ -134,8 +147,18 @@ verimlilik ve yatirim dayali gelir yapilacak
                         <h5 class="card-title">Durum</h5>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">
-                        Durum Textleri Buraya Gelecek</p>
+                    <p class="card-text h5 mb-2"> Kasa : <?php echo $kasam; ?></p>
+                    <p class="card-text h5 mb-2"> Gunluk Gider </p>
+                    <p class="card-text h5 mb-2"> Gunluk Gelir </p>
+                    <p class="card-text h5 mb-2"> Verimlilik : <?php echo $verimlilik; ?></p>
+                    <p class="card-text h5 mb-2"> Isci Sayisi : <?php echo $Iscisayi; ?></p>
+                    <p class="card-text h5 mb-2"> Kredi Skoru : <?php echo $kredi_skoru; ?></p>
+                    <p class="card-text h5 mb-2"> Banka Kredisi Toplami : <?php echo $borc_miktari; ?></p>
+                    <p class="card-text h5 mb-2"> Yatirim Miktari <?php echo $yatirim_miktari; ?></p>
+                    <p class="card-text h5 mb-2"> Yatirima Uygun Para : <?php  $tum_yatirimlar = $kasam + $yatirim_miktari; echo $tum_yatirimlar - $borc_miktari; ?></p>
+    
+
+    
                     </div>
                 </div>
                         <!--BANKA-->
@@ -245,7 +268,8 @@ verimlilik ve yatirim dayali gelir yapilacak
                     </div>
                     <div class="card-body justify-content-center">
 
-                        <?php                             $query4 = $pdo->prepare("SELECT * FROM isci WHERE sahip_sirket_id = 0");
+                        <?php                             
+                            $query4 = $pdo->prepare("SELECT * FROM isci WHERE sahip_sirket_id = 0");
                             $query4->execute();
                             $sayi = $query4->rowCount();
                             $isciler = $query4->fetch(PDO::FETCH_ASSOC);
