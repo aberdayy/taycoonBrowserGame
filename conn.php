@@ -22,4 +22,5 @@ try {
 
 
 
+
 // Veritabanına bağlandıktan sonra PDO nesnesini kullanarak sorguları gerçekleştirebilirsiniz.

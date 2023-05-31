@@ -5,6 +5,7 @@ $kullanici = $_GET["ui"];
 $talep = $_GET["ck"];
 $kredi_skoru = $_GET["ks"];
 
+
 $kredi = 10000;
 if ($talep == 1) {
     #kredi cek
