@@ -49,7 +49,6 @@ if ($talep == 1) {
     }
 } elseif ($talep == 0) {
     # kredi ode
-    header("Location:krediode.php");
 
     $query7 = $pdo->prepare("SELECT * FROM sirket WHERE kullanicinin_id = ?");
     $query7->execute([$kullanici]);
