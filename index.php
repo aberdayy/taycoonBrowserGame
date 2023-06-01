@@ -17,11 +17,16 @@ Banka ekranina kredi tutari yapildi
 en fazla kredi tutarinin yarisini yatirim yapabilecek kontrol yapilmaktan vazgecildi
 verimlilik ve yatirim dayali gelir yapildi
 GUNLUK GELIR GIDER YAPISI kuruldu
+Banka borc ode sayfasi hatali eksi kredi cikartiyor duzeltildi. 
+kayit sayfasi yapildi
+email konfirmasyon yapildi
+kasadaki borcsuz para miktarina gore kredi skoru artisi yapildi => kontrol edildi
 
-kasadaki borcsuz para miktarina gore kredi skoru artisi yapildi => kontrol gerekli
-
+Oyun icin dokumantasyon oyun klavuzu yapilacak. (Dokumantasyon icin=> Sirket icerisinde gun bitmeden yapilan her bir islem bir is gununu bitirir.)
 Hata / Error sayfalari yapilacak
-Banka borc ode sayfasi hatali eksi kredi cikartiyor duzeltilmeli. 
+Eger kasa ekside ise ve kredi skoru minimum seviyede ise icraalik olursun ve oyun biter. 
+banka borcuna faiz eklenecek.
+register.php deki kodlar calisiyor ancak live test lazim host baglantisi gerekli 
 
 */
 
@@ -36,7 +41,7 @@ Banka borc ode sayfasi hatali eksi kredi cikartiyor duzeltilmeli.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ataberk Erday browser game</title>
     <link rel="stylesheet" href="main.css">
-    <meta http-equiv="Refresh" content="10; url=index.php">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
     <style>
@@ -124,15 +129,11 @@ Banka borc ode sayfasi hatali eksi kredi cikartiyor duzeltilmeli.
         $query10 = $pdo->prepare("SELECT SUM(maas) FROM isci WHERE sahip_sirket_id = ?");
         $query10->execute([$myID]);
         foreach ($query10 as $key) {
-            $maas_gider =  $key["SUM(maas)"];
+            $maas_gider =  ceil(($key["SUM(maas)"]/15));
         }
 
-        if (($borc_miktari < 0) and ($kredi_skoru == 100) and ($verimlilik > 75) and ($kasam >= 20000)) {
-            $guncel_ks = $kredi_skoru + 5;
-            $query12 = $pdo->prepare("UPDATE banka SET kredi_skoru = ?  WHERE kullanicinin_id = ?");
-            $query12->execute([$guncel_ks, $myID]);
-        }
-        $gunluk_gelir = (($yatirim_miktari * $verimlilik) / 100);
+        
+        $gunluk_gelir = ceil((((($yatirim_miktari * $verimlilik) / 100)*$Iscisayi)/15));
 
 
     ?>
@@ -162,6 +163,12 @@ Banka borc ode sayfasi hatali eksi kredi cikartiyor duzeltilmeli.
                     } else {
                         echo 0;
                     }
+
+                    if (($borc_miktari <= 0) and ($kredi_skoru >= 100) and ($verimlilik > 75) and ($kasam >= 20000)) {
+                        $guncel_ks = $kredi_skoru + 5;
+                        $query12 = $pdo->prepare("UPDATE banka SET kredi_skoru = ?  WHERE borc_sirket_id = ?");
+                        $query12->execute([$guncel_ks, $myID]);
+                    }
                     ?>
                 </p>
                 <a href="logout.php" class="nav-link">Cikis yap
@@ -185,9 +192,7 @@ Banka borc ode sayfasi hatali eksi kredi cikartiyor duzeltilmeli.
                             <p class="card-text h5 mb-2"> Kredi Skoru : <?php echo $kredi_skoru; ?> PTS</p>
                             <p class="card-text h5 mb-2"> Banka Kredisi Toplami : <?php echo $borc_miktari; ?> TRY</p>
                             <p class="card-text h5 mb-2"> Yatirim Miktari <?php echo $yatirim_miktari; ?> TRY</p>
-                            <p class="card-text h5 mb-2"> Yatirima Uygun Para : <?php $tum_yatirimlar = $kasam + $yatirim_miktari;
-                                                                                echo $tum_yatirimlar - $borc_miktari; ?> TRY</p>
-                        </div>
+                       </div>
                     </div>
                     <!--BANKA-->
 
@@ -317,7 +322,9 @@ Banka borc ode sayfasi hatali eksi kredi cikartiyor duzeltilmeli.
                 </div>
             </div>
         </div>
-    <?php } else { ?>
+
+        <?php    
+    } else { ?>
         <!--GIRIS YAP -->
 
         <div class="row justify-content-center  mt-5">
@@ -336,8 +343,47 @@ Banka borc ode sayfasi hatali eksi kredi cikartiyor duzeltilmeli.
                             <div class="form-group">
                                 <label>Sifre</label>
                                 <input name="password" type="password" class="form-control" placeholder="Sifre">
+                            </div><br>
+                            <input type="submit" value="Gonder" class="btn btn-primary">
+                        </form>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Dunyanin en muhtesem is oyununa hosgeldin
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center  mt-5">
+            <div class="col-sm-4 mt-5">
+                <div class="card text-center ">
+                    <div class="card-header">
+                        Hosgeldin oyuncu
+                    </div>
+                    <div class="card-body ">
+                        <h5 class="card-title">Kayit Ol</h5>
+                        <form action="register.php" method="POST">
+                        <div class="form-group">
+                                <label><b>Sirketinin isimini yaz</b></label>
+                                <input name="sirket_ismi" class="form-control" placeholder="Sirketinin isimini yaz">
                             </div>
-                            <input type="submit" class="btn btn-primary">
+                            <div class="form-group">
+                                <label><b>Kendi isimini yaz</b></label>
+                                <input name="username" class="form-control" placeholder="Kendi isimini yaz">
+                            </div>
+                            <div class="form-group">
+                                <label><b>Email Adresini Yaz</b></label>
+                                <input name="email_adresi" class="form-control" placeholder="Email Adresini Yaz">
+                            </div>
+                            <div class="form-group">
+                                <label><b>Sifreni Yaz</b></label>
+                                <input name="sifre" type="password" class="form-control" placeholder="Sifreni Yaz">
+                            </div>
+                            <div class="form-group">
+                                <label><b>Sifreni tekrar et</b></label>
+                                <input name="sifre_tekrar" type="password" class="form-control" placeholder="Sifreni tekrar et">
+                            </div><br>
+                            <input type="submit"  value="Gonder" class="btn btn-primary">
                         </form>
                     </div>
                     <div class="card-footer text-muted">
@@ -351,11 +397,17 @@ Banka borc ode sayfasi hatali eksi kredi cikartiyor duzeltilmeli.
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script>
+
+setTimeout(function(){
+   window.location.reload(1);
+   <?php 
+    gunBitir($myID, $gunluk_gelir, $maas_gider);
+   ?>
+}, 30000);
+
+
+</script>
 </body>
 
 </html>
-<?php
-if (sleep(20) == 0) {
-    gunBitir($myID, $gunluk_gelir, $maas_gider);
-}
-?>

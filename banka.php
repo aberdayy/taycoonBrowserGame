@@ -49,7 +49,14 @@ if ($talep == 1) {
     }
 } elseif ($talep == 0) {
     # kredi ode
+    $query111 = $pdo->prepare("SELECT * FROM banka WHERE borc_sirket_id = ?");
+    $query111->execute([$kullanici]);
+    foreach ($query111 as $key) {
+        $kredi_skoru_reel = $key["kredi_skoru"];
+        $guncel_borc = $key["borc_miktari"];
+    }
 
+    if ($guncel_borc>0) {
     $query7 = $pdo->prepare("SELECT * FROM sirket WHERE kullanicinin_id = ?");
     $query7->execute([$kullanici]);
     foreach ($query7 as $key) {
@@ -83,6 +90,10 @@ if ($talep == 1) {
     } else {
         header("Location:paraYok.php");
     }
+}else{
+    header("Location:index.php"); //borc>0 
+}
+    
 } else {
     # hata
     header("Location:genelhatasi.php");
