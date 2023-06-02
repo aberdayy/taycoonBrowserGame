@@ -16,7 +16,7 @@ if ($tf > 0) {
     header("Location:index.php"); // Giris basarili
     exit();
 } else {
-    header("Location:hata.php"); //basarisiz hatasi
+    header("Location:error.php?hk=Kullanici%20adi%20veya%20sifre%20yanlis%20lutfen%20daha%20sonra%20tekrar%20deneyiniz"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
     exit();
 }
 

@@ -39,13 +39,13 @@ if ($talep == 1) {
             if ($sonuc > 0) {
                 header("Location:index.php"); // Guncelleme basarili
             } else {
-                header("Location:kasayaeklenemedi.php");
+                header("Location:error.php?hk=kasa%20guncelleme%20basarisiz%20lutfen%20daha%20sonra%20tekrar%20deneyiniz"); //aktivasyon basarisiz
             }
         } else {
-            header("Location:borcYapilamadi.php");
+            header("Location:error.php?hk=kredi%20verilirken%20hata%20gerceklesti%20lutfen%20daha%20sonra%20tekrar%20deneyiniz"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
         }
     } else {
-        header("Location:krediskoruhatasi.php");
+        header("Location:error.php?hk=kredi%20skorunuz%20islem%20icin%20yetersiz%20lutfen%20daha%20sonra%20tekrar%20deneyiniz"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
     }
 } elseif ($talep == 0) {
     # kredi ode
@@ -82,21 +82,21 @@ if ($talep == 1) {
             if ($islem > 0) {
                 header("Location:index.php"); // islemler basarili 
             } else {
-                header("Location:borcKapanmadi.php");
+                header("Location:error.php?hk=borc%20odeme%20islemi%20gerceklesemedi%20lutfen%20daha%20sonra%20tekrar%20deneyiniz"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
             }
         } else {
-            header("Location:kasaGuncellenemedi.php");
+            header("Location:error.php?hk=kasadan%20para%20cekilemedi%20lutfen%20daha%20sonra%20tekrar%20deneyiniz"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
         }
     } else {
-        header("Location:paraYok.php");
+        header("Location:error.php?hk=borc%20odemek%20icin%20yetersiz%20bakiye%20lutfen%20daha%20sonra%20tekrar%20deneyiniz"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
     }
 }else{
-    header("Location:index.php"); //borc>0 
+    header("Location:error.php?hk=borcunuz%20bulunmamaktadir%20bankamizi%20kullandiginiz%20icin%20tesekkur%20ederiz%20lutfen%20daha%20sonra%20tekrar%20deneyiniz"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
 }
     
 } else {
     # hata
-    header("Location:genelhatasi.php");
+    header("Location:error.php?hk=tehlike"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
 }
 
 // Veritabanı bağlantısını kapat

@@ -10,7 +10,7 @@ foreach ($query1 as $varolan) {
     $deger = $varolan["miktar"];
     
 }
-$query3 = $pdo->prepare("SELECT * FROM sirket WHERE sirket_id = ?");
+$query3 = $pdo->prepare("SELECT * FROM sirket WHERE kullanicinin_id = ?");
 $query3->execute([$yatirimci]);
 foreach ($query3 as $varolan) {
     $deger2 = $varolan["kasa"];
@@ -24,7 +24,7 @@ if ($deger>=$yatirimCek) {
     $query2->execute([$sonuc,$yatirimci]);
 
     $sonuc2 = $deger2 + $yatirimCek; 
-    $query4 = $pdo->prepare("UPDATE sirket SET kasa = ? WHERE sirket_id = ?");
+    $query4 = $pdo->prepare("UPDATE sirket SET kasa = ? WHERE kullanicinin_id = ?");
     $query4->execute([$sonuc2,$yatirimci]);
     
     header("Location:index.php"); // Guncelleme basarili
@@ -32,7 +32,7 @@ if ($deger>=$yatirimCek) {
 
 
 }else {
-    header("Location:index.php"); // Guncelleme basarili
+    header("Location:error.php?hk=Bu%20miktarda%20parayi%20suanda%20cekemezsiniz%20lutfen%20daha%20kucuk%20mebla%20deneyiniz"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
     exit();
 
 }

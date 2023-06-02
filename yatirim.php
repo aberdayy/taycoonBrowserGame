@@ -7,7 +7,7 @@ $yatirimci = $_GET["yatirimci"];
 $yatirimCek = $_GET["yatirimCek"];
 
 
-$query3 = $pdo->prepare("SELECT * FROM sirket WHERE sirket_id = ?");
+$query3 = $pdo->prepare("SELECT * FROM sirket WHERE kullanicinin_id = ?");
 $query3->execute([$yatirimci]);
 foreach ($query3 as $varolan) {
     $kasa = $varolan["kasa"];
@@ -15,7 +15,7 @@ foreach ($query3 as $varolan) {
 }
 if ($kasa>=$yatirim) {
     $sonuc2 = $kasa - $yatirim; 
-    $query4 = $pdo->prepare("UPDATE sirket SET kasa = ? WHERE sirket_id = ?");
+    $query4 = $pdo->prepare("UPDATE sirket SET kasa = ? WHERE kullanicinin_id = ?");
     $query4->execute([$sonuc2,$yatirimci]);
 
     $query1 = $pdo->prepare("SELECT * FROM yatirim WHERE yatirimci_sirket_id = ?");
@@ -31,7 +31,7 @@ if ($kasa>=$yatirim) {
     exit();
 
 }else{
-    header("Location:index.php"); // kasa bos
+    header("Location:error.php?hk=Suanda%20yatirim%20yapacak%20paraniz%20bulunmamaktadir%20lutfen%20para%20biriktirip%20sonra%20deneyiniz"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
     exit();
 
 }

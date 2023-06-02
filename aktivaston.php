@@ -1,4 +1,5 @@
 <?php 
+
 require("./conn.php");
 
 $aktivasyon_kodu = $_GET["AktivasyonKodu"];
@@ -15,11 +16,11 @@ if ($kontrol>0) {
     if ($kontrol2>0) {
         header("Location:index.php"); //aktivasyon basarili
     }else{
-        header("Location:xxxxxxx.php"); //aktivasyon basarisiz
+        header("Location:error.php?hk=aktivasyon%20basarisiz%20lutfen%20daha%20sonra%20tekrar%20deneyiniz"); //aktivasyon basarisiz
     }
     
 }else{
-    header("Location:xxxxx.php"); //uyusmayan mail ve aktivasyon kodu    
+    header("Location:error.php?hk=email%20adresi%20ve%20aktivasyon%20kodu%20uyusmuyor%20lutfen%20daha%20sonra%20tekrar%20deneyiniz"); //
 }
 
 ?>
