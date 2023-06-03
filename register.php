@@ -2,13 +2,6 @@
 require("./conn.php");
 ob_start();
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require "src\Exception.php"; // dosyayi kurdugunuz alan 
-require "src\PHPMailer.php"; // dosyayi kurdugunuz alan 
-require "src\SMTP.php"; // dosyayi kurdugunuz alan 
-
 // Kullanıcı adı ve şifre doğrulaması yapılacak
 $sirket_ismi = $_POST['sirket_ismi'];
 $username = $_POST['username'];
