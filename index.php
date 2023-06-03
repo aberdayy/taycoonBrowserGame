@@ -12,7 +12,6 @@ function gunBitir($kullanici_id, $gelir, $gider)
 
 #TO DO
 /*
-Eger kasa ekside ise ve kredi skoru minimum seviyede ise icraalik olursun ve oyun biter. //yapildi
 
 Oyun icin dokumantasyon oyun klavuzu yapilacak. (Dokumantasyon icin=> Sirket icerisinde gun bitmeden yapilan her bir islem bir is gununu bitirir.)
 */

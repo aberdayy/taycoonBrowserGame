@@ -2,10 +2,10 @@
 session_start();
 
 $host = 'localhost';
-$db   = 'game';
-$user = 'root';
-$pass = 'admin';
-$charset = 'utf8';
+$db   = 'u117094580_ata12';
+$user = 'u117094580_484508';
+$pass = 'Thebeetle12';
+$charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
