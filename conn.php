@@ -19,17 +19,6 @@ try {
 } catch (\PDOException $e) {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }
-function aktivasyonKoduUret($uzunluk = 16) {
-    $karakterler = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $kod = '';
-
-    for ($i = 0; $i < $uzunluk; $i++) {
-        $rastgeleIndex = rand(0, strlen($karakterler) - 1);
-        $kod .= $karakterler[$rastgeleIndex];
-    }
-
-    return $kod;
-}
 
 
 

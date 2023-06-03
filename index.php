@@ -12,20 +12,9 @@ function gunBitir($kullanici_id, $gelir, $gider)
 
 #TO DO
 /*
-Durum ekrani yapildi
-Banka ekranina kredi tutari yapildi
-en fazla kredi tutarinin yarisini yatirim yapabilecek kontrol yapilmaktan vazgecildi
-verimlilik ve yatirim dayali gelir yapildi
-GUNLUK GELIR GIDER YAPISI kuruldu
-Banka borc ode sayfasi hatali eksi kredi cikartiyor duzeltildi. 
-kayit sayfasi yapildi
-email konfirmasyon yapildi
-kasadaki borcsuz para miktarina gore kredi skoru artisi yapildi => kontrol edildi
-Hata / Error sayfalari yaoildi
-register.php deki kodlar calisiyor ancak live test lazim host baglantisi gerekli // iptal edildi.
+Eger kasa ekside ise ve kredi skoru minimum seviyede ise icraalik olursun ve oyun biter. //yapildi
 
 Oyun icin dokumantasyon oyun klavuzu yapilacak. (Dokumantasyon icin=> Sirket icerisinde gun bitmeden yapilan her bir islem bir is gununu bitirir.)
-Eger kasa ekside ise ve kredi skoru minimum seviyede ise icraalik olursun ve oyun biter. Db deki kullanici tablosunun durum field update derek kontrol saglanacak vs. 
 */
 
 ?>
@@ -95,9 +84,6 @@ Eger kasa ekside ise ve kredi skoru minimum seviyede ise icraalik olursun ve oyu
         $query->execute([$myID]);
         $kasa = $query->fetch(PDO::FETCH_ASSOC);
 
-        $query2 = $pdo->prepare("SELECT * FROM kullanici WHERE kullanici_id = ?");
-        $query2->execute([$myID]);
-        $isim = $query2->fetch(PDO::FETCH_ASSOC);
 
         $query5 = $pdo->prepare("SELECT * FROM isci WHERE sahip_sirket_id = ?");
         $query5->execute([$myID]);
@@ -131,8 +117,17 @@ Eger kasa ekside ise ve kredi skoru minimum seviyede ise icraalik olursun ve oyu
             $maas_gider =  ceil(($key["SUM(maas)"] / 30));
         }
 
+        $query2 = $pdo->prepare("SELECT * FROM kullanici WHERE kullanici_id = ?");
+        $query2->execute([$myID]);
+        $isim = $query2->fetch(PDO::FETCH_ASSOC);
 
-        $gunluk_gelir = ceil((((($yatirim_miktari * $verimlilik) / 100) * $Iscisayi) / 2));
+        $gunluk_gelir = ceil((((($yatirim_miktari * $verimlilik) / 100) * $Iscisayi) / 30));
+
+        if (($kredi_skoru<=50)and($kasam<=0)and($maas_gider>$gunluk_gelir)) {
+            $query13 = $pdo->prepare("UPDATE kullanici SET durumu = ?  WHERE kullanici_id = ?");
+            $query13->execute([0, $myID]);
+        }
+
 
         if ($isim["durumu"] == 0) {
     ?>
@@ -160,7 +155,7 @@ Eger kasa ekside ise ve kredi skoru minimum seviyede ise icraalik olursun ve oyu
             <nav class="navbar bg-dark navbar-expand-lg sticky-top justify-content-center" data-bs-theme="dark">
                 <div class="navbar-nav ">
                     <p class="nav-link">
-                    <h6 style="color: azure;">Oyun ici bir gun gercek dunyada 3 dakikadir.</h6>
+                    <h6 style="color: azure;">Oyun ici bir gun gercek dunyada 20 saniyedir.</h6>
                     </p>
                     <audio class="nav-link" controls loop autoplay>
                         <source src="music/Elevator Music.mp3" type="audio/mpeg">
@@ -423,7 +418,7 @@ Eger kasa ekside ise ve kredi skoru minimum seviyede ise icraalik olursun ve oyu
             <?php
             gunBitir($myID, $gunluk_gelir, $maas_gider);
             ?>
-        }, 30000);
+        }, 20000);
     </script>
 </body>
 
