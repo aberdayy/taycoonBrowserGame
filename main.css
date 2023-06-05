@@ -8,10 +8,11 @@
     display: flex;
     gap:40px
 }
-.card-container{
+ .card-container{
     display: flex;
     justify-content: center;
-}
+} 
+
 .status-card{
     min-width: 400px;
     min-height: 350px;
@@ -33,6 +34,10 @@
     justify-content: center;
     border-bottom:1px solid gray;
 }
+.ortaDiv {
+    width: 33%;
+}
+
 @media screen and (max-width: 550px) {
     .navbar-collapse div { 
         display: flex;
@@ -46,4 +51,5 @@
         align-items: center;
         justify-content: center;
     }
+
   }

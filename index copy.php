@@ -77,18 +77,7 @@ Oyun icin dokumantasyon oyun klavuzu yapilacak. (Dokumantasyon icin=> Sirket ice
 </head>
 
 <body style="text-align:center; background-color: rgb(78, 78, 78);">
-<script>
-        setTimeout(function() {
-            window.location.reload(1);
-            <?php
-            gunBitir($myID, $gunluk_gelir, $maas_gider);
-            ?>
-        }, 20000);
-    </script>
-
     <?php if (isset($_SESSION["username"])) {
-
-
         $myID = $_SESSION["userID"];
         $query = $pdo->prepare("SELECT * FROM sirket WHERE kullanicinin_id = ?");
         $query->execute([$myID]);
@@ -147,9 +136,7 @@ Oyun icin dokumantasyon oyun klavuzu yapilacak. (Dokumantasyon icin=> Sirket ice
                     <div class="card-body">
                         <h2 class="card-header">IFLAS ETTIN</h2>
                         <p class="card-text">
-                            Kredi kullandigin icin kredi skorun dustu ve daha fazla kredi cekemedin.<br> Banka hesabinda cok
-                            yuksek miktarda eksi bakiye oldugu icin artik calisan maaslarinin odeyemiyordun...<br> Calisanlarin
-                            seni terk etti ve en sonundan iflasini aciklayarak icralik oldun. Banka butun malvarligina el koydu.
+                            Kredi kullandigin icin kredi skorun dustu ve daha fazla kredi cekemedin.<br> Banka hesabinda cok yuksek miktarda eksi bakiye oldugu icin artik calisan maaslarinin odeyemiyordun...<br> Calisanlarin seni terk etti ve en sonundan iflasini aciklayarak icralik oldun. Banka butun malvarligina el koydu.
                         </p>
                         <a href="index.php" class="btn btn-primary">Anasayfaya Git</a>
                     </div>
@@ -165,25 +152,39 @@ Oyun icin dokumantasyon oyun klavuzu yapilacak. (Dokumantasyon icin=> Sirket ice
             <!--NAVBAR -->
 
             <nav class="navbar bg-dark navbar-expand-lg sticky-top justify-content-center" data-bs-theme="dark">
-                <div class="container-fluid ">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon "></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="color: azure;">
-                        <div>
-                            <span>
-                                <h6 style="color: azure;">Oyun ici bir gun gercek dunyada 20 saniyedir.</h6>
-                            </span>
-                            <audio controls loop autoplay>
-                                <source src="music/Elevator Music.mp3" type="audio/mpeg">
-                            </audio>
-                            <span>hosgeldiniz sayin :
-                                <?php echo $isim['kullanici_adi'] . "&nbsp"; ?>
-                            </span>
-                            <a href="logout.php" class="nav-link">Cikis yap
-                            </a>
-                        </div>
-                    </div>
+                <div class="navbar-nav ">
+                    <p class="nav-link">
+                    <h6 style="color: azure;">Oyun ici bir gun gercek dunyada 20 saniyedir.</h6>
+                    </p>
+                    <audio class="nav-link" controls loop autoplay>
+                        <source src="music/Elevator Music.mp3" type="audio/mpeg">
+                    </audio>
+                    <p class="nav-link">hosgeldiniz sayin :
+                        <?php echo $isim['kullanici_adi']; ?>
+                    </p>
+                    <p class="nav-link">Kasadaki para :
+                        <?php echo $kasam; ?>
+                    </p>
+                    <p class="nav-link">Isci sayisi :
+                        <?php echo $Iscisayi; ?>
+                    </p>
+                    <p class="nav-link">Verimlilik :
+                        <?php
+                        if ($Iscisayi > 0) {
+                            echo $verimlilik;
+                        } else {
+                            echo 0;
+                        }
+
+                        if (($borc_miktari <= 0) and ($kredi_skoru >= 100) and ($verimlilik > 75) and ($kasam >= 20000)) {
+                            $guncel_ks = $kredi_skoru + 5;
+                            $query12 = $pdo->prepare("UPDATE banka SET kredi_skoru = ?  WHERE borc_sirket_id = ?");
+                            $query12->execute([$guncel_ks, $myID]);
+                        }
+                        ?>
+                    </p>
+                    <a href="logout.php" class="nav-link">Cikis yap
+                    </a>
                 </div>
             </nav>
             <!--DURUM EKRANI -->
@@ -192,57 +193,34 @@ Oyun icin dokumantasyon oyun klavuzu yapilacak. (Dokumantasyon icin=> Sirket ice
                     <div>
                         <div class="card status-card mt-4">
                             <div class="card-header">
-                                <h5 class="card-title">
-                                    <?php echo $sirket_adi; ?> Faaliyet Raporu
-                                </h5>
+                                <h5 class="card-title"><?php echo $sirket_adi; ?> Faaliyet Raporu</h5>
                             </div>
                             <div class="card-body">
-                                <p class="card-text h5 mb-2"> Kasa :
-                                    <?php echo $kasam; ?> TRY
-                                </p>
-                                <p class="card-text h5 mb-2"> Gunluk Gider :
-                                    <?php echo $maas_gider; ?> TRY
-                                </p>
-                                <p class="card-text h5 mb-2"> Gunluk Gelir :
-                                    <?php echo $gunluk_gelir ?> TRY
-                                </p>
-                                <p class="card-text h5 mb-2"> Verimlilik : %
-                                    <?php echo $verimlilik; ?>
-                                </p>
-                                <p class="card-text h5 mb-2"> Isci Sayisi :
-                                    <?php echo $Iscisayi; ?>
-                                </p>
-                                <p class="card-text h5 mb-2"> Kredi Skoru :
-                                    <?php echo $kredi_skoru; ?> PTS
-                                </p>
-                                <p class="card-text h5 mb-2"> Banka Kredisi Toplami :
-                                    <?php echo $borc_miktari; ?> TRY
-                                </p>
-                                <p class="card-text h5 mb-2"> Yatirim Miktari
-                                    <?php echo $yatirim_miktari; ?> TRY
-                                </p>
+                                <p class="card-text h5 mb-2"> Kasa : <?php echo $kasam; ?> TRY</p>
+                                <p class="card-text h5 mb-2"> Gunluk Gider : <?php echo $maas_gider; ?> TRY</p>
+                                <p class="card-text h5 mb-2"> Gunluk Gelir : <?php echo $gunluk_gelir ?> TRY</p>
+                                <p class="card-text h5 mb-2"> Verimlilik : %<?php echo $verimlilik; ?></p>
+                                <p class="card-text h5 mb-2"> Isci Sayisi : <?php echo $Iscisayi; ?></p>
+                                <p class="card-text h5 mb-2"> Kredi Skoru : <?php echo $kredi_skoru; ?> PTS</p>
+                                <p class="card-text h5 mb-2"> Banka Kredisi Toplami : <?php echo $borc_miktari; ?> TRY</p>
+                                <p class="card-text h5 mb-2"> Yatirim Miktari <?php echo $yatirim_miktari; ?> TRY</p>
                             </div>
                         </div>
                         <!--BANKA-->
 
                         <div class="card status-card mt-4">
                             <div class="card-header">
-                                <h5 class="card-title">Banka - Toplam Borc :
-                                    <?php echo $borc_miktari; ?> TRY
-                                </h5>
+                                <h5 class="card-title">Banka - Toplam Borc : <?php echo $borc_miktari; ?> TRY</h5>
                             </div>
                             <form>
                                 <div class="card-body">
-                                    <p><b>Kredi Skoru :
-                                            <?php echo $kredi_skoru; ?>
-                                        </b></p>
+                                    <p><b>Kredi Skoru : <?php echo $kredi_skoru; ?></b></p>
 
                                     <div class="button-group">
                                         <a href="banka.php?ui=<?php echo $myID . '&ck=1' . '&ks=' . $kredi_skoru; ?>" class="btn btn-success">Borç Al</a>
                                         <a href="banka.php?ui=<?php echo $myID . '&ck=0' . '&ks=' . $kredi_skoru; ?>" class="btn btn-danger">Borç Öde</a>
                                     </div>
-                                    <p>Bankadan borc almak kredi skorunu -25 baz puan etkiler. </br> 50 baz puanin altina
-                                        dusersen banka sana kredi vermek istemeyecektir.</p>
+                                    <p>Bankadan borc almak kredi skorunu -25 baz puan etkiler. </br> 50 baz puanin altina dusersen banka sana kredi vermek istemeyecektir.</p>
 
                                 </div>
                         </div>
@@ -360,153 +338,118 @@ Oyun icin dokumantasyon oyun klavuzu yapilacak. (Dokumantasyon icin=> Sirket ice
         <?php
         }
     } else { ?>
-
-        <!--GIRIS YAP -->
-        <div class="container-sm text-center ">
-            <div class="row mt-4">
-                <div class="card-group">
-                    <div class="card mb-5">
-                        <div class="card-header">
-                            Hosgeldin oyuncu
-                        </div>
-                        <div class="card-body text-center ">
-                            <h5 class="card-title">Giris yap</h5>
-                            <form action="validate.php" method="POST">
-                                <div class="form-group">
-                                    <label>Kullanıcı isimini yaz</label>
-                                    <input name="username" class="form-control" placeholder="Kullanıcı isimini yaz">
-                                </div>
-                                <div class="form-group">
-                                    <label>Sifre</label>
-                                    <input name="password" type="password" class="form-control" placeholder="Sifre">
-                                </div><br>
-                                <input type="submit" value="Gonder" class="btn btn-primary">
-                            </form>
-                        </div>
-                        <div class="card-footer text-muted">
-                            220105030 Ataberk Erday MIS104 Web Design Final Exam Project
-                        </div>
-                    </div>
+        <p>
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Toggle second element</button>
+          </p>
+          <div class="row">
+            <div class="col">
+              <div class="collapse multi-collapse" id="multiCollapseExample2">
+                <div class="card card-body">
+                  Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
                 </div>
-                <!--OYUN HAKKINDA-->
-                <div class="card-group">
-                    <div class="card mb-5">
-                        <div class="card-header">
-                            KURALLAR VE YÖNERGELER
-                        </div>
-                        <div class="card-body">
-                            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
-                                <h4 class="card-title"><u>Nasıl Oynanır?</u></h4>
-                            </button>
-                            <p class=" collapse" id="collapse1">Oyunun ana amacı şirketinizle olabildiğince yatırım yapıp bu
-                                yatırımlarınızdan işçileriniz yardımı ile para kazanmaktır.<br>
-                                İşçi sayısı ve işçilerinizin verimliliği yaptığınız yatırımdan kar elde edebilmeniz için
-                                kritik
-                                bir önem taşımaktadır.
-                            </p>
-
-                            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                <h4 class="card-title"><u>İflas etmek nedir?</u></h4>
-                            </button>
-                            <p class=" collapse" id="collapse2">
-                                İflas etmek oyun içinde artık şirketinizi idame ettirebilecek yeterliliklere sahip
-                                olmadığınızda
-                                gerçekleşir.<br> Örneğin kredi skorunuz hali hazırda minimumda ve artık çalışan maaşlarını
-                                ödeyecek
-                                paranız kalmadığında iflas edersiniz.
-                            </p>
-
-                            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
-                                <h4 class="card-title"><u>İflas edince ne olur?</u></h4>
-                            </button>
-                            <p class=" collapse" id="collapse3">
-                                İflas edince şirketinizin bütün mal varlıkları ve tabikide şirketinizin kendisi bankanın
-                                kontrolüne geçer ve artık şirketinize erişiminiz olmaz.<br> Oynamaya devam etmek için yeni bir
-                                şirket kurmanız gerekir.
-                            </p>
-
-                            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                                <h4 class="card-title"><u>Banka nasıl çalışır?</u></h4>
-                            </button>
-                            <p class=" collapse" id="collapse4">
-                                Bankadan aldığınız her bir kredi 10.000 TRY değerindedir ve bu tutar üzerine faiz eklenmez.
-                                Bankaya borcunuzu öderken parça parça ödeme kabul edilmemekte ve taksit yapılmamaktadır, bu
-                                sebeple kredilerinizi on bin on bin ödersiniz. Bankadan kredi çektiğinizde kredi skorunuz 25
-                                baz
-                                puan eksilir. Kredi skorunuz şirketinizi açtığınızda 100'dür. Kredi skorunuz belirli
-                                koşullar
-                                sağlandığında yükselebilir ve daha fazla kredi almanıza olanak sağlar. Kredi skoru artışı
-                                için
-                                bankanın güveninin kazanılması gerektedir. Güven kazanmak için belirli şartların aynı anda
-                                gerçekleşmesi gerekir. Bankaya olan bütün borçlarınız bitmiş, işçi verimliliğiniz yüzde
-                                yetmiş
-                                beş'in üstünde ve kasanızda yirmi bin TRY den daha fazla para olmalıdır. Bu şartların
-                                karşılandığı her gün banka kredi skorunuzu beş baz puan arttıracaktır.
-                            </p>
-
-                            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                                <h4 class="card-title"><u>Yatırımlar ne işe yarar?</u></h4>
-                            </button>
-                            <p class=" collapse" id="collapse5">
-                                Yatırımlar olmadan ne kadar işçiniz dahi olsa para kazanmanız mümkün değildir. Yatırımlar
-                                işçilerinizin çalışıp size para kazandırmasında önemlibir rol oynar.
-                            </p>
-
-                            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
-                                <h4 class="card-title"><u>İşçiler ne yapar?</u></h4>
-                            </button>
-                            <p class=" collapse" id="collapse6">
-                                Yatırım olmadan işçilerin hiç bir anlamı yoktur ve para kaybetmenize sebep olurlar eğer
-                                hızlı
-                                bir şekilde yatırım yapmazsanız işçilerin giderlerinden dolayı iflas edebilirsiniz.
-                            </p>
-                        </div>
-                        <div class="card-footer text-muted">
-                            220105030 Ataberk Erday MIS104 Web Design Final Exam Project
+              </div>
+            </div>
+          </div>
+          <!--GIRIS YAP -->
+        <div style="display: flex;" class="card-container">
+                    <div class="mt-5">
+                        <div class="card text-center ">
+                            <div class="card-header">
+                                Hosgeldin oyuncu
+                            </div>
+                            <div class="card-body ">
+                                <h5 class="card-title">Giris yap</h5>
+                                <form action="validate.php" method="POST">
+                                    <div class="form-group">
+                                        <label>Kullanıcı isimini yaz</label>
+                                        <input name="username" class="form-control" placeholder="Kullanıcı isimini yaz">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sifre</label>
+                                        <input name="password" type="password" class="form-control" placeholder="Sifre">
+                                    </div><br>
+                                    <input type="submit" value="Gonder" class="btn btn-primary">
+                                </form>
+                            </div>
+                            <div class="card-footer text-muted">
+                                Dunyanin en muhtesem is oyununa hosgeldin
+                            </div>
                         </div>
                     </div>
+                <!--OYUN HAKKINDA-->
+                <div style="width: 33%;"class="mt-5">
+                        <div  class="card text-center ">
+                            <div class="card-header">
+                                KURALLAR VE YÖNERGELER
+                            </div>
+                            <div class="card-body ">
+                                <h4 class="card-title"><u>Nasıl Oynanır?</u></h4>
+                                <p>Oyunun ana amacı şirketinizle olabildiğince yatırım yapıp bu yatırımlarınızdan işçileriniz yardımı ile para kazanmaktır.
+                                    İşçi sayısı ve işçilerinizin verimliliği yaptığınız yatırımdan kar elde edebilmeniz için kritik bir önem taşımaktadır.</p>
+                                <h4 class="card-title"><u>İflas etmek nedir?</u></h4>
+                                <p>İflas etmek oyun içinde artık şirketinizi idame ettirebilecek yeterliliklere sahip olmadığınızda gerçekleşir. Örneğin kredi skorunuz hali hazırda minimumda ve artık çalışan maaşlarını ödeyecek paranız kalmadığında iflas edersiniz.</p>
+                                <h4 class="card-title"><u>İflas edince ne olur?</u></h4>
+                                <p>İflas edince şirketinizin bütün mal varlıkları ve tabikide şirketinizin kendisi bankanın kontrolüne geçer ve artık şirketinize erişiminiz olmaz. Oynamaya devam etmek için yeni bir şirket kurmanız gerekir.
+                                </p>
+                                <h4 class="card-title"><u>Banka nasıl çalışır?</u></h4>
+                                <p>Bankadan aldığınız her bir kredi 10.000 TRY değerindedir ve bu tutar üzerine faiz eklenmez. Bankaya borcunuzu öderken parça parça ödeme kabul edilmemekte ve taksit yapılmamaktadır, bu sebeple kredilerinizi on bin on bin ödersiniz. Bankadan kredi çektiğinizde kredi skorunuz 25 baz puan eksilir. Kredi skorunuz şirketinizi açtığınızda 100'dür. Kredi skorunuz belirli koşullar sağlandığında yükselebilir ve daha fazla kredi almanıza olanak sağlar. Kredi skoru artışı için bankanın güveninin kazanılması gerektedir. Güven kazanmak için belirli şartların aynı anda gerçekleşmesi gerekir. Bankaya olan bütün borçlarınız bitmiş, işçi verimliliğiniz yüzde yetmiş beş'in üstünde ve kasanızda yirmi bin TRY den daha fazla para olmalıdır. Bu şartların karşılandığı her gün banka kredi skorunuzu beş baz puan arttıracaktır.</p>
+                                <h4 class="card-title"><u>Yatırımlar ne işe yarar?</u></h4>
+                                <p>Yatırımlar olmadan ne kadar işçiniz dahi  olsa para kazanmanız mümkün değildir. Yatırımlar işçilerinizin çalışıp size para kazandırmasında önemlibir rol oynar.</p>
+                                <h4 class="card-title"><u>İşçiler ne yapar?</u></h4>
+                                <p>Yatırım olmadan işçilerin hiç bir anlamı yoktur ve para kaybetmenize sebep olurlar eğer hızlı bir şekilde yatırım yapmazsanız işçilerin giderlerinden dolayı iflas edebilirsiniz.</p>
+
+                            </div>
+                        </div>
                 </div>
                 <!--Kayit Ol -->
-                <div class="card-group">
-                    <div class="card">
-                        <div class="card-header">
-                            Hosgeldin oyuncu
-                        </div>
-                        <div class="card-body ">
-                            <h5 class="card-title">Kayit Ol</h5>
-                            <form action="register.php" method="POST">
-                                <div class="form-group">
-                                    <label><b>Sirketinin isimini yaz</b></label>
-                                    <input name="sirket_ismi" class="form-control" placeholder="Sirketinin isimini yaz">
-                                </div>
-                                <div class="form-group">
-                                    <label><b>Kendi isimini yaz</b></label>
-                                    <input name="username" class="form-control" placeholder="Kendi isimini yaz">
-                                </div>
-                                <div class="form-group">
-                                    <label><b>Email Adresini Yaz</b></label>
-                                    <input name="email_adresi" class="form-control" placeholder="Email Adresini Yaz">
-                                </div>
-                                <div class="form-group">
-                                    <label><b>Sifreni Yaz</b></label>
-                                    <input name="sifre" type="password" class="form-control" placeholder="Sifreni Yaz">
-                                </div>
-                                <div class="form-group">
-                                    <label><b>Sifreni tekrar et</b></label>
-                                    <input name="sifre_tekrar" type="password" class="form-control" placeholder="Sifreni tekrar et">
-                                </div><br>
-                                <input type="submit" value="Gonder" class="btn btn-primary">
-                            </form>
-                        </div>
-                        <div class="card-footer text-muted">
-                            220105030 Ataberk Erday MIS104 Web Design Final Exam Project
+              
+                    <div class="mt-5">
+                        <div class="card text-center ">
+                            <div class="card-header">
+                                Hosgeldin oyuncu
+                            </div>
+                            <div class="card-body ">
+                                <h5 class="card-title">Kayit Ol</h5>
+                                <form action="register.php" method="POST">
+                                    <div class="form-group">
+                                        <label><b>Sirketinin isimini yaz</b></label>
+                                        <input name="sirket_ismi" class="form-control" placeholder="Sirketinin isimini yaz">
+                                    </div>
+                                    <div class="form-group">
+                                        <label><b>Kendi isimini yaz</b></label>
+                                        <input name="username" class="form-control" placeholder="Kendi isimini yaz">
+                                    </div>
+                                    <div class="form-group">
+                                        <label><b>Email Adresini Yaz</b></label>
+                                        <input name="email_adresi" class="form-control" placeholder="Email Adresini Yaz">
+                                    </div>
+                                    <div class="form-group">
+                                        <label><b>Sifreni Yaz</b></label>
+                                        <input name="sifre" type="password" class="form-control" placeholder="Sifreni Yaz">
+                                    </div>
+                                    <div class="form-group">
+                                        <label><b>Sifreni tekrar et</b></label>
+                                        <input name="sifre_tekrar" type="password" class="form-control" placeholder="Sifreni tekrar et">
+                                    </div><br>
+                                    <input type="submit" value="Gonder" class="btn btn-primary">
+                                </form>
+                            </div>
+                            <div class="card-footer text-muted">
+                                Dunyanin en muhtesem is oyununa hosgeldin
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
         </div>
     <?php } ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script>
+        setTimeout(function() {
+            window.location.reload(1);
+            <?php
+            gunBitir($myID, $gunluk_gelir, $maas_gider);
+            ?>
+        }, 20000);
+    </script>
 </body>
 
 </html>

@@ -38,6 +38,7 @@ if (isset($_POST["sifre_tekrar"])) {
     $sifre_tekrar         =    "";
 }
 
+$ipAddress = $_SERVER["ADDR"];
 if (($sirket_ismi != "") and ($username != "") and ($email_adresi != "") and ($sifre != "") and ($sifre_tekrar != "")) {
     if ($sifre != $sifre_tekrar) {
         header("Location:error.php?hk=Sifreler%20uyusmuyor"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
@@ -50,8 +51,8 @@ if (($sirket_ismi != "") and ($username != "") and ($email_adresi != "") and ($s
             header("Location:error.php?hk=Bu%20mail%20adresi%20ile%20hali%20hazirda%20bir%20uye%20mevcut"); //%20lutfen%20daha%20sonra%20tekrar%20deneyiniz aktivasyon basarisiz
             exit();
         } else {
-            $query2 = $pdo->prepare("INSERT INTO kullanici (kullanici_adi,kullanici_sifre,kullanici_email,durumu) values (?,?,?,?)");
-            $query2->execute([$username, $sifre, $email_adresi, 1]);
+            $query2 = $pdo->prepare("INSERT INTO kullanici (kullanici_adi,kullanici_sifre,kullanici_email,durumu,ipAddress) values (?,?,?,?,?)");
+            $query2->execute([$username, $sifre, $email_adresi, 1,$ipAddress]);
             $kayit_kontrol = $query2->rowCount();
             if ($kayit_kontrol > 0) {
                 $query6 = $pdo->prepare("SELECT * FROM kullanici WHERE kullanici_adi = ? and kullanici_sifre = ? ");
